@@ -5,17 +5,25 @@ per default the one contained in the GitHub repository `Topp-Gradle-Convention`.
 
 How to bootstrap a Gradle multi-module project of your own:
 
-1. Ensure that this bootstrap repository has been cloned using Git. \
-   On Linux, `git clone https://github.com/sabroe/Topp-Gradle-Bootstrap.git ~/.topp/gradle/script/Topp-Gradle-Bootstrap` \
-   On Windows, `git clone https://github.com/sabroe/Topp-Gradle-Bootstrap.git %USERPROFILE%\.topp\gradle\script\Topp-Gradle-Bootstrap`
-2. In the main settings file of your own multi-module project, 
-   e.g. a Kotlin DSL `settings.gradle.kts`,
-   refer first to the location of the cloned bootstrap repository using `includeBuild(...)`
-   and second to the specific script `bootstrap.setings.gradle.kts` as the plugin with id `bootstrap`.
+1. Ensure that this bootstrap repository has been cloned using Git.
+2. In the main settings file of your own multi-module project,
+   refer to the bootstrap Gradle settings plugin.
 
-In your `settings.gradle.kts`, this may appear like this:
+Specifically, start by cloning this repository:
+* On Linux, `git clone https://github.com/sabroe/Topp-Gradle-Bootstrap.git ~/.topp/gradle/script/Topp-Gradle-Bootstrap`
+* On Windows, `git clone https://github.com/sabroe/Topp-Gradle-Bootstrap.git %USERPROFILE%\.topp\gradle\script\Topp-Gradle-Bootstrap`
+
+Then, in your Kotlin DSL `settings.gradle.kts`,
+refer first to the location of the cloned bootstrap repository using `includeBuild(...)`
+and second to the specific script `bootstrap.setings.gradle.kts` as the plugin with id `bootstrap`.
+
+This may appear like this:
 
 ```
+#
+# My own Gradle project settings file "settings.gradle.kts".
+#
+
 rootProject.name = "My-Super-Project"
 
 pluginManagement {
