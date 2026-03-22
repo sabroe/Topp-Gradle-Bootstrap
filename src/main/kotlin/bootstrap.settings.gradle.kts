@@ -17,25 +17,27 @@
  * limitations under the License.
  */
 
+import com.yelstream.topp.gradle.boot.BootstrapBuilds
 import me.champeau.gradle.igp.gitRepositories
 
 plugins {
     id("me.champeau.includegit")
 }
 
-val gitUseCLI = settings.providers.gradleProperty("bootstrap.git.use.cli").map{it.toBoolean()}.getOrElse(true)
-val checkoutsDirectory = settings.providers.gradleProperty("bootstrap.git.checkouts.directory").getOrElse("${System.getProperty("user.home")}/.topp/gradle/script/")
-val checkoutsDirectoryFile = java.io.File(checkoutsDirectory)
-var repositoryName = settings.providers.gradleProperty("bootstrap.git.repo.name").getOrElse("Topp-Gradle-Convention")
-var repositoryURL = settings.providers.gradleProperty("bootstrap.git.repo.uri").getOrElse("https://github.com/sabroe/Topp-Gradle-Convention.git")
-var repositoryBranch = settings.providers.gradleProperty("bootstrap.git.repo.branch").getOrElse("main")
+val bootstrapBuild = BootstrapBuilds.of(settings)
+
 
 gitRepositories {
-    useGitCli = gitUseCLI
-    checkoutsDirectory.set(checkoutsDirectoryFile)
-    include(repositoryName) {
-        uri.set(repositoryURL)
-        branch.set(repositoryBranch)
+    defaultAuthentication {
+        sshWithPublicKey()
+    }
+    useGitCli = bootstrapBuild.gitUseCLI
+    checkoutsDirectory.set(bootstrapBuild.checkoutsDirectory.toFile())
+    include(bootstrapBuild.repositoryName) {
+        uri.set(bootstrapBuild.repositoryURL.toString())
+        branch.set(bootstrapBuild.repositoryBranch)
+
         // includeBuild(".")
+    includeBuild("module/Topp-Gradle-Feature")
     }
 }
