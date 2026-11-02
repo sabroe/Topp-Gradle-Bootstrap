@@ -28,8 +28,15 @@ val bootstrapBuild = BootstrapBuilds.of(settings)
 
 
 gitRepositories {
-    defaultAuthentication {
-        sshWithPublicKey()
+    // The Gradle property 'bootstrap.git.use.cli' (default: true) chooses the git client.
+    // With 'true', the git command line is used, and git authenticates with your own git and SSH setup.
+    // With 'false', the plugin's built-in Java git client is used, and it authenticates with the SSH key below.
+    // The plugin ignores the authentication with the git command line, and warns "Custom authentication via
+    // the authentication DSL is incompatible with use of the git CLI client", so it is set only for 'false'.
+    if (!bootstrapBuild.gitUseCLI) {
+        defaultAuthentication {
+            sshWithPublicKey()
+        }
     }
     useGitCli = bootstrapBuild.gitUseCLI
     checkoutsDirectory.set(bootstrapBuild.checkoutsDirectory.toFile())
